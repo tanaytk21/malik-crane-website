@@ -414,10 +414,10 @@ p:last-child { margin-bottom: 0; }
 .page--tinted { background: var(--card); }
 .page--tinted .site-header { background: var(--card); }
 
-/* Products runs wider than the rest of the site so the photographs have
-   room to breathe. */
+/* Card width chosen so three 280px photos fill it the way the mockup does
+   (~95% of the panel's inner width) rather than floating in empty space. */
 .products {
-  max-width: 1400px;
+  max-width: 1060px;
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 4vw, 2.25rem);
@@ -470,32 +470,28 @@ p:last-child { margin-bottom: 0; }
   width: 100%;
 }
 
+/* The files themselves are square, so no CSS cropping is involved — every
+   photo is the same shape and the same size, everywhere on the page. */
 .panel__media img {
   width: 100%;
-  aspect-ratio: 20 / 21;
+  aspect-ratio: 1 / 1;
   height: auto;
   object-fit: cover;
-  border-radius: 6px;
+  border-radius: 4px;
   background: var(--card);
 }
-
-/* A square-ish cell crops the very wide and very tall originals hard, so
-   nudge the focal point where a centre crop would cut the machine. */
-.panel__media img.crop-right  { object-position: 62% center; }
-.panel__media img.crop-left   { object-position: 34% center; }
-.panel__media img.crop-lower  { object-position: center 62%; }
-.panel__media img.crop-bottom { object-position: center 74%; }
 
 .panel__cta { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
 
 @media (min-width: 620px) {
   .panel__media--3,
-  .panel__media--2 { grid-template-columns: repeat(2, minmax(0, 300px)); }
+  .panel__media--2 { grid-template-columns: repeat(2, 280px); }
 }
 
 @media (min-width: 900px) {
-  .panel__media--3 { grid-template-columns: repeat(3, minmax(0, 300px)); }
-  .panel__media--2 { grid-template-columns: repeat(2, minmax(0, 300px)); }
+  .panel__media--3 { grid-template-columns: repeat(3, 280px); gap: 10px; }
+  /* The mockup sets the pairs slightly further apart than the trio */
+  .panel__media--2 { grid-template-columns: repeat(2, 280px); gap: 58px; }
 }
 
 /* --------------------------------------------------------------------------
