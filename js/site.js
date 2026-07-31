@@ -234,33 +234,64 @@
   function wireScrollSequences() {
     var seqs = [];
     document.querySelectorAll('[data-scroll-seq]').forEach(function (seq) {
-      var stage = seq.querySelector('.scroll-seq__stage');
-      var reveal = seq.querySelector('.scroll-seq__reveal');
-      if (!stage || !reveal) return;
+      var panels = [];
+      for (var i = 0; i < seq.children.length; i++) {
+        if (seq.children[i].classList.contains('scroll-seq__panel')) panels.push(seq.children[i]);
+      }
+      if (panels.length < 2) return;
       seq.classList.add('is-live');
-      seqs.push({ seq: seq, stage: stage, reveal: reveal });
+      seqs.push({ seq: seq, panels: panels, tops: [], heights: [] });
     });
     if (!seqs.length) return;
+
+    /* A stuck panel reports its painted position, not its position in the
+       document flow — both offsetTop and getBoundingClientRect do. So sticky
+       and the transforms are switched off for one synchronous read, and the
+       flow geometry is cached. Re-measured only on resize. */
+    function measure(s) {
+      s.seq.classList.add('is-measuring');
+      s.panels.forEach(function (el) { el.style.transform = 'none'; });
+
+      var y = window.scrollY || window.pageYOffset || 0;
+      s.tops = s.panels.map(function (el) { return el.getBoundingClientRect().top + y; });
+      s.heights = s.panels.map(function (el) { return el.offsetHeight; });
+
+      s.seq.classList.remove('is-measuring');
+    }
 
     var queued = false;
 
     function paint() {
       queued = false;
-      var vh = window.innerHeight;
+      var y = window.scrollY || window.pageYOffset || 0;
 
       seqs.forEach(function (s) {
-        var box = s.seq.getBoundingClientRect();
-        var travel = box.height - vh;          // distance the section scrolls past
-        if (travel <= 0) return;               // too short to animate
+        var panels = s.panels;
 
-        var p = -box.top / travel;             // 0 at section top, 1 at section end
-        p = p < 0 ? 0 : (p > 1 ? 1 : p);
+        // How far the following panel has covered each one, 0 to 1.
+        var covered = panels.map(function (el, i) {
+          if (i === panels.length - 1) return 0;   // nothing covers the last panel
+          var h = s.heights[i];
+          if (!h) return 0;
+          var p = (y - s.tops[i]) / h;
+          return p < 0 ? 0 : (p > 1 ? 1 : p);
+        });
 
-        // first panel shrinks and tips left; second grows in and levels off
-        s.stage.style.transform =
-          'scale(' + (1 - 0.2 * p).toFixed(4) + ') rotate(' + (-5 * p).toFixed(3) + 'deg)';
-        s.reveal.style.transform =
-          'scale(' + (0.8 + 0.2 * p).toFixed(4) + ') rotate(' + (5 - 5 * p).toFixed(3) + 'deg)';
+        panels.forEach(function (el, i) {
+          var entered = i === 0 ? 1 : covered[i - 1];  // how far this panel has arrived
+          var leaving = covered[i];                    // how far it is being covered
+
+          var scale = (0.8 + 0.2 * entered) - 0.2 * leaving;
+          var rotate = 5 * (1 - entered) - 5 * leaving;
+
+          el.style.transform =
+            'scale(' + scale.toFixed(4) + ') rotate(' + rotate.toFixed(3) + 'deg)';
+
+          /* Fade a panel out as the next one covers it. A scaled-down panel
+             can never fully hide the one beneath, so without this the older
+             card peeks out along the edges. */
+          el.style.opacity = (1 - leaving).toFixed(3);
+        });
       });
     }
 
@@ -268,9 +299,16 @@
       if (!queued) { queued = true; window.requestAnimationFrame(paint); }
     }
 
+    function remeasure() {
+      seqs.forEach(measure);
+      paint();
+    }
+
     window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    paint();
+    window.addEventListener('resize', remeasure);
+    // Images settling can shift the layout, so measure again once loaded
+    window.addEventListener('load', remeasure);
+    remeasure();
   }
 
   function init() {

@@ -381,6 +381,26 @@ p:last-child { margin-bottom: 0; }
 /* Only promote to its own layer while the effect is actually wired up */
 .scroll-seq.is-live .scroll-seq__panel { will-change: transform; }
 
+/* Held for a single synchronous read so the panels report their position in
+   the flow rather than where sticky has painted them. */
+.scroll-seq.is-measuring .scroll-seq__panel { position: static !important; }
+
+/* Stacked variant: every panel sticks, so each card slides up over the last.
+   The dark container shows through around a panel while it is scaled below
+   full size — the same framing the reference effect gets from its black
+   backdrop, and it stops the previous card peeking out at the edges. */
+.scroll-seq--stack { background: var(--ink); }
+
+.scroll-seq--stack .scroll-seq__panel {
+  position: sticky;
+  top: 0;
+  background: var(--card);
+  padding-block: clamp(2rem, 5vw, 3.25rem);
+}
+
+.scroll-seq--stack .wrap { max-width: 1060px; }
+.scroll-seq--stack .panel { width: 100%; }
+
 /* Short viewports (landscape phones) can't spare two full screens */
 @media (max-height: 560px) {
   .scroll-seq__panel { min-height: 0; padding-block: 3rem; }
