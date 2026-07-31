@@ -19,12 +19,10 @@
   var ADDRESS = 'Amar Industrial Estate, Building No 7, CST Road, Kolivery Village, ' +
                 'MMRDA Area, Kalina, Santacruz East, Mumbai, Maharashtra 400098, India';
 
-  /* Where the footer map drops its pin.
-     A plain address makes Google guess, and it guesses badly around Kalina.
-     For an exact pin, replace this with "lat,lng" — e.g. '19.0728,72.8656'.
-     Get those by right-clicking the spot in Google Maps and copying the
-     coordinates from the top of the menu. */
-  var MAP_QUERY = ADDRESS;
+  /* Exact coordinates of the office, supplied by the owner. Using lat/lng
+     rather than the address string stops Google guessing — it geocodes the
+     Kalina/MMRDA address to the wrong building. */
+  var MAP_QUERY = '19.0718907,72.8663181';
 
   var COMPANY = {
     name: 'Malik Crane Services Private Limited',
@@ -33,9 +31,10 @@
     email: 'contact@malikcrane.com',
     phone: '+91 7942637031',
     phoneHref: '+917942637031',
-    mapsUrl: 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(MAP_QUERY),
+    // The button says "Get directions", so route straight into navigation.
+    mapsUrl: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(MAP_QUERY),
     // Keyless Google Maps embed. loading="lazy" keeps it off the critical path.
-    mapEmbed: 'https://www.google.com/maps?q=' + encodeURIComponent(MAP_QUERY) + '&output=embed',
+    mapEmbed: 'https://www.google.com/maps?q=' + encodeURIComponent(MAP_QUERY) + '&z=17&output=embed',
     // TODO: replace with the real profile URLs when you have them
     facebook: '#',
     linkedin: '#'

@@ -551,6 +551,17 @@ p:last-child { margin-bottom: 0; }
 }
 .map-link:hover { background: rgba(26, 26, 26, .13); text-decoration: none; }
 
+/* Match the mail/phone icon treatment — without this the pin inherits no
+   size or stroke and renders as a solid blob (or not at all). */
+.map-link svg {
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+}
+
 .footer__tagline {
   margin: .75rem 0 0;
   font-size: .95rem;
