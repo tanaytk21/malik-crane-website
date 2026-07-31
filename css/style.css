@@ -414,7 +414,10 @@ p:last-child { margin-bottom: 0; }
 .page--tinted { background: var(--card); }
 .page--tinted .site-header { background: var(--card); }
 
+/* Products runs wider than the rest of the site so the photographs have
+   room to breathe. */
 .products {
+  max-width: 1400px;
   display: flex;
   flex-direction: column;
   gap: clamp(1.5rem, 4vw, 2.25rem);
@@ -435,8 +438,9 @@ p:last-child { margin-bottom: 0; }
   margin: 0;
 }
 
+/* Scales with the card, roughly the 47% the mockup uses */
 .panel__rule {
-  width: min(430px, 100%);
+  width: clamp(220px, 47%, 660px);
   height: 0;
   margin: 1.6rem auto 0;
   border: 0;
@@ -444,17 +448,21 @@ p:last-child { margin-bottom: 0; }
 }
 
 .panel__lede {
-  max-width: 68ch;
+  max-width: 1120px; /* wide enough to sit on one line on a large screen */
   margin: 1.75rem auto 0;
   font-size: .98rem;
 }
 
+/* One grid rhythm for the whole page: every image cell is the same width and
+   the same shape, whether the panel holds two photos or three. That
+   uniformity is what makes the page read as tidy. */
 .panel__media {
+  --gap: 14px;
   display: grid;
   grid-template-columns: 1fr;
-  gap: clamp(1rem, 2.5vw, 1.5rem);
+  gap: var(--gap);
   margin-top: clamp(1.75rem, 4vw, 2.5rem);
-  justify-items: center;
+  justify-content: center;
 }
 
 .panel__media figure {
@@ -464,31 +472,34 @@ p:last-child { margin-bottom: 0; }
 
 .panel__media img {
   width: 100%;
-  height: clamp(230px, 30vw, 297px);
+  aspect-ratio: 20 / 21;
+  height: auto;
   object-fit: cover;
-  border-radius: 2px;
+  border-radius: 6px;
   background: var(--card);
 }
+
+/* A square-ish cell crops the very wide and very tall originals hard, so
+   nudge the focal point where a centre crop would cut the machine. */
+.panel__media img.crop-right  { object-position: 62% center; }
+.panel__media img.crop-left   { object-position: 34% center; }
+.panel__media img.crop-lower  { object-position: center 62%; }
+.panel__media img.crop-bottom { object-position: center 74%; }
 
 .panel__cta { margin-top: clamp(1.75rem, 4vw, 2.5rem); }
 
 @media (min-width: 620px) {
-  /* Pairs stay narrow and centred rather than stretching across the card,
-     which would over-crop the portrait shots. */
-  .panel__media--2 {
-    grid-template-columns: repeat(2, minmax(0, 280px));
-    justify-content: center;
-    gap: clamp(1.25rem, 4vw, 3.5rem);
-  }
-  /* Threes run edge to edge with a tight gutter, as in the mockup. */
-  .panel__media--3 {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: .75rem;
-  }
+  .panel__media--3,
+  .panel__media--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
-@media (min-width: 880px) {
+@media (min-width: 900px) {
   .panel__media--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  /* Pairs occupy two of the same three columns, centred — so a photo in a
+     pair is exactly as big as a photo in a trio. */
+  .panel__media--2 {
+    grid-template-columns: repeat(2, minmax(0, calc((100% - var(--gap) * 2) / 3)));
+  }
 }
 
 /* --------------------------------------------------------------------------
