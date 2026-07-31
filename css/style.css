@@ -348,6 +348,46 @@ p:last-child { margin-bottom: 0; }
 .trust .btn { margin-top: 2rem; }
 
 /* --------------------------------------------------------------------------
+   Scroll sequence
+   The first panel sticks to the top and scales away as the second rises over
+   it. JS writes the transforms; everything here still reads correctly if it
+   never runs.
+   -------------------------------------------------------------------------- */
+.scroll-seq { position: relative; }
+
+.scroll-seq__panel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+  padding-block: clamp(3rem, 8vw, 5rem);
+  background: var(--bg);
+  transform-origin: center center;
+}
+
+.scroll-seq__stage {
+  position: sticky;
+  top: 0;
+}
+
+/* Sits above the sticky panel and hides it as it scales up */
+.scroll-seq__reveal {
+  position: relative;
+  z-index: 1;
+  border-radius: var(--r-md);
+}
+
+/* Only promote to its own layer while the effect is actually wired up */
+.scroll-seq.is-live .scroll-seq__panel { will-change: transform; }
+
+/* Short viewports (landscape phones) can't spare two full screens */
+@media (max-height: 560px) {
+  .scroll-seq__panel { min-height: 0; padding-block: 3rem; }
+  .scroll-seq__stage { position: static; }
+}
+
+/* --------------------------------------------------------------------------
    Project carousel — CSS scroll-snap, JS only drives the arrows
    -------------------------------------------------------------------------- */
 .carousel {

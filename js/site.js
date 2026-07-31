@@ -227,6 +227,52 @@
     });
   }
 
+  /* Scroll-linked sticky panels.
+     Reads how far through the section the page has scrolled (0 to 1) and maps
+     that to a scale and a rotation on each panel — the same idea as a scroll
+     progress hook in a JS animation library, but the browser does the work. */
+  function wireScrollSequences() {
+    var seqs = [];
+    document.querySelectorAll('[data-scroll-seq]').forEach(function (seq) {
+      var stage = seq.querySelector('.scroll-seq__stage');
+      var reveal = seq.querySelector('.scroll-seq__reveal');
+      if (!stage || !reveal) return;
+      seq.classList.add('is-live');
+      seqs.push({ seq: seq, stage: stage, reveal: reveal });
+    });
+    if (!seqs.length) return;
+
+    var queued = false;
+
+    function paint() {
+      queued = false;
+      var vh = window.innerHeight;
+
+      seqs.forEach(function (s) {
+        var box = s.seq.getBoundingClientRect();
+        var travel = box.height - vh;          // distance the section scrolls past
+        if (travel <= 0) return;               // too short to animate
+
+        var p = -box.top / travel;             // 0 at section top, 1 at section end
+        p = p < 0 ? 0 : (p > 1 ? 1 : p);
+
+        // first panel shrinks and tips left; second grows in and levels off
+        s.stage.style.transform =
+          'scale(' + (1 - 0.2 * p).toFixed(4) + ') rotate(' + (-5 * p).toFixed(3) + 'deg)';
+        s.reveal.style.transform =
+          'scale(' + (0.8 + 0.2 * p).toFixed(4) + ') rotate(' + (5 - 5 * p).toFixed(3) + 'deg)';
+      });
+    }
+
+    function schedule() {
+      if (!queued) { queued = true; window.requestAnimationFrame(paint); }
+    }
+
+    window.addEventListener('scroll', schedule, { passive: true });
+    window.addEventListener('resize', schedule);
+    paint();
+  }
+
   function init() {
     var headerSlot = document.getElementById('site-header');
     var footerSlot = document.getElementById('site-footer');
@@ -236,6 +282,7 @@
 
     wireMobileNav();
     wireCarousels();
+    wireScrollSequences();
   }
 
   if (document.readyState === 'loading') {
