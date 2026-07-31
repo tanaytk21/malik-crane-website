@@ -490,16 +490,12 @@ p:last-child { margin-bottom: 0; }
 
 @media (min-width: 620px) {
   .panel__media--3,
-  .panel__media--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .panel__media--2 { grid-template-columns: repeat(2, minmax(0, 300px)); }
 }
 
 @media (min-width: 900px) {
-  .panel__media--3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
-  /* Pairs occupy two of the same three columns, centred — so a photo in a
-     pair is exactly as big as a photo in a trio. */
-  .panel__media--2 {
-    grid-template-columns: repeat(2, minmax(0, calc((100% - var(--gap) * 2) / 3)));
-  }
+  .panel__media--3 { grid-template-columns: repeat(3, minmax(0, 300px)); }
+  .panel__media--2 { grid-template-columns: repeat(2, minmax(0, 300px)); }
 }
 
 /* --------------------------------------------------------------------------
