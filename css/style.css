@@ -420,10 +420,27 @@ p:last-child { margin-bottom: 0; }
   text-align: center;
 }
 
-.uc__art {
-  width: clamp(150px, 26vw, 215px);
-  height: auto;
+/* The crane trundles left to right across its lane and eases back, so it is
+   always fully on screen — a full pass-through would leave the lane empty
+   for most of the loop, since the lane is only as wide as the mockup allows. */
+.uc__art-lane {
+  --art: clamp(150px, 26vw, 215px);
+  --lane: clamp(190px, 32vw, 300px);
+  position: relative;
   flex: 0 0 auto;
+  width: var(--lane);
+  height: calc(var(--art) * .977); /* viewBox is 215 x 210 */
+}
+
+.uc__art {
+  width: var(--art);
+  height: auto;
+  animation: crane-drive 6s ease-in-out infinite alternate;
+}
+
+@keyframes crane-drive {
+  from { transform: translateX(0); }
+  to   { transform: translateX(calc(var(--lane) - var(--art))); }
 }
 
 .uc__title {
@@ -651,12 +668,12 @@ p:last-child { margin-bottom: 0; }
   .nav__link[aria-current='page'] { border-bottom-color: var(--accent); }
 }
 
-/* Respect reduced-motion preferences */
+/* Reduced motion: damp down hover transitions and smooth scrolling, but
+   deliberately leave the deliberate animations (the project marquee and the
+   About page crane) running — they are content, and the site owner wants
+   them visible for everyone. */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .carousel__track { scroll-behavior: auto; }
-  *, *::before, *::after {
-    transition-duration: .01ms !important;
-    animation-duration: .01ms !important;
-  }
+  *, *::before, *::after { transition-duration: .01ms !important; }
 }
