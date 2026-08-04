@@ -319,6 +319,40 @@
     remeasure();
   }
 
+  /* Cursor spotlight.
+     Writes the pointer position, relative to each card's own box, onto that
+     card as --gx/--gy. Per-card rather than one global viewport coordinate,
+     because a scaled or rotated card re-anchors a fixed background to itself.
+     Only cards currently on screen are touched, and updates are collapsed to
+     one per frame. */
+  function wireSpotlight() {
+    var cards = document.querySelectorAll('.panel, .stat, .trust, .uc__row');
+    if (!cards.length) return;
+
+    // Pointer-driven, so skip devices that only report coarse input
+    if (window.matchMedia && window.matchMedia('(hover: none)').matches) return;
+
+    var px = 0, py = 0, queued = false;
+
+    function paint() {
+      queued = false;
+      var vh = window.innerHeight;
+
+      cards.forEach(function (el) {
+        var box = el.getBoundingClientRect();
+        if (box.bottom < -200 || box.top > vh + 200) return;   // off screen
+        el.style.setProperty('--gx', (px - box.left).toFixed(1) + 'px');
+        el.style.setProperty('--gy', (py - box.top).toFixed(1) + 'px');
+      });
+    }
+
+    window.addEventListener('pointermove', function (e) {
+      px = e.clientX;
+      py = e.clientY;
+      if (!queued) { queued = true; window.requestAnimationFrame(paint); }
+    }, { passive: true });
+  }
+
   function init() {
     var headerSlot = document.getElementById('site-header');
     var footerSlot = document.getElementById('site-footer');
@@ -329,6 +363,7 @@
     wireMobileNav();
     wireCarousels();
     wireScrollSequences();
+    wireSpotlight();
   }
 
   if (document.readyState === 'loading') {

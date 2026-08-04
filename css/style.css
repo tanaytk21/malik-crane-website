@@ -773,6 +773,68 @@ p:last-child { margin-bottom: 0; }
 .footer__legal p { margin: 0; }
 
 /* --------------------------------------------------------------------------
+   Cursor spotlight
+   A soft wash across the card surface plus a lit edge, both following the
+   pointer. Coordinates are per-card and set by JS: a fixed background would
+   have been cheaper, but it attaches to the element rather than the viewport
+   once that element is transformed, which the product cards are.
+   Starts off-canvas so nothing glows until the pointer actually moves.
+   -------------------------------------------------------------------------- */
+.panel,
+.stat,
+.trust,
+.uc__row {
+  --gx: -999px;
+  --gy: -999px;
+  --glow-size: 340px;
+  --glow-tint: 230 58 23;          /* accent */
+  --glow-wash: .10;
+  --glow-edge: .85;
+  position: relative;
+  background-image: radial-gradient(
+    var(--glow-size) var(--glow-size) at var(--gx) var(--gy),
+    rgb(var(--glow-tint) / var(--glow-wash)), transparent 70%);
+  background-repeat: no-repeat;
+}
+
+/* The lit edge: a ring drawn by masking out the middle of a gradient */
+.panel::before,
+.stat::before,
+.trust::before,
+.uc__row::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: radial-gradient(
+    calc(var(--glow-size) * .8) calc(var(--glow-size) * .8) at var(--gx) var(--gy),
+    rgb(var(--glow-tint) / var(--glow-edge)), transparent 70%);
+  -webkit-mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+  mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Navy reads better than accent on the pale stat cards */
+.stat { --glow-tint: 11 45 114; --glow-wash: .09; }
+
+/* Yellow is the only tint with enough contrast on the dark panel */
+.trust {
+  --glow-tint: 252 217 0;
+  --glow-wash: .07;
+  --glow-edge: .55;
+}
+
+/* The About page has no card, so light the illustration's lane instead */
+.uc__row {
+  --glow-wash: .07;
+  --glow-edge: 0;
+  border-radius: var(--r-md);
+}
+
+/* --------------------------------------------------------------------------
    Utilities
    -------------------------------------------------------------------------- */
 .visually-hidden {
