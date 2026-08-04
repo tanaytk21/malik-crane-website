@@ -436,82 +436,6 @@ p:last-child { margin-bottom: 0; }
 .trust .btn { margin-top: 2rem; }
 
 /* --------------------------------------------------------------------------
-   Scroll sequence
-   The first panel sticks to the top and scales away as the second rises over
-   it. JS writes the transforms; everything here still reads correctly if it
-   never runs.
-   -------------------------------------------------------------------------- */
-.scroll-seq { position: relative; }
-
-.scroll-seq__panel {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-  min-height: 100svh;
-  padding-block: clamp(3rem, 8vw, 5rem);
-  background: var(--bg);
-  transform-origin: center center;
-}
-
-.scroll-seq__stage {
-  position: sticky;
-  top: 0;
-}
-
-/* Sits above the sticky panel and hides it as it scales up */
-.scroll-seq__reveal {
-  position: relative;
-  z-index: 1;
-  border-radius: var(--r-md);
-}
-
-/* Only promote what actually moves, and only once the effect is wired up */
-.scroll-seq.is-live:not(.scroll-seq--stack) .scroll-seq__panel { will-change: transform; }
-.scroll-seq.is-live .panel[data-seq-card] { will-change: transform; }
-
-/* Held for a single synchronous read so the panels report their position in
-   the flow rather than where sticky has painted them. */
-.scroll-seq.is-measuring .scroll-seq__panel { position: static !important; }
-
-/* Card-stack variant.
-   The slot is an ordinary transparent stretch of page that only supplies
-   scroll distance — it is not sticky and has no background, so the grey
-   behind it never moves. The card inside is what sticks and flips, and the
-   next card arrives at full size on top, hiding the one it replaces. */
-.scroll-seq--cards .scroll-seq__panel {
-  position: relative;
-  display: block;
-  min-height: 100vh;
-  background: none;
-  padding-block: 0;
-  padding-inline: var(--gutter);
-}
-
-.scroll-seq--cards .panel {
-  position: sticky;
-  top: calc(var(--header-h) + 1.25rem);
-  max-width: 980px;
-  margin-inline: auto;
-  transform-origin: center center;
-}
-
-/* Not enough height for a card to travel — fall back to a plain list */
-@media (max-height: 620px) {
-  .scroll-seq--cards .scroll-seq__panel { min-height: 0; padding-block: 1rem; }
-  .scroll-seq--cards .panel { position: static; }
-}
-
-.scroll-seq--stack .wrap { max-width: 1060px; }
-.scroll-seq--stack .panel { width: 100%; }
-
-/* Short viewports (landscape phones) can't spare two full screens */
-@media (max-height: 560px) {
-  .scroll-seq__panel { min-height: 0; padding-block: 3rem; }
-  .scroll-seq__stage { position: static; }
-}
-
-/* --------------------------------------------------------------------------
    Project carousel — CSS scroll-snap, JS only drives the arrows
    -------------------------------------------------------------------------- */
 .carousel {
@@ -1051,12 +975,7 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
 }
 
-/* Product cards light along the edge only.
-   The bloom is off here, not just turned down: these cards are position:
-   sticky, which makes them a stacking context, and inside one a z-index:-1
-   pseudo-element paints over the card's own background instead of behind it.
-   The bloom therefore washed across the whole card rather than spilling out
-   past its edge. */
+/* Product cards light along the edge only — no surface wash, no outer bloom */
 .panel {
   --glow-wash: 0;
   --glow-halo: 0;

@@ -229,98 +229,6 @@
     });
   }
 
-  /* Scroll-linked sticky panels.
-     Reads how far through the section the page has scrolled (0 to 1) and maps
-     that to a scale and a rotation on each panel — the same idea as a scroll
-     progress hook in a JS animation library, but the browser does the work. */
-  function wireScrollSequences() {
-    var seqs = [];
-    document.querySelectorAll('[data-scroll-seq]').forEach(function (seq) {
-      var panels = [];
-      for (var i = 0; i < seq.children.length; i++) {
-        if (seq.children[i].classList.contains('scroll-seq__panel')) panels.push(seq.children[i]);
-      }
-      if (panels.length < 2) return;
-      seq.classList.add('is-live');
-      /* Geometry is read from the panel, but the transform is applied to the
-         card inside it when one is marked — so the full-height background
-         stays put and only the card moves. */
-      var cards = panels.map(function (el) {
-        return el.querySelector('[data-seq-card]') || el;
-      });
-      seqs.push({ seq: seq, panels: panels, cards: cards, tops: [], heights: [] });
-    });
-    if (!seqs.length) return;
-
-    /* A stuck panel reports its painted position, not its position in the
-       document flow — both offsetTop and getBoundingClientRect do. So sticky
-       and the transforms are switched off for one synchronous read, and the
-       flow geometry is cached. Re-measured only on resize. */
-    function measure(s) {
-      s.seq.classList.add('is-measuring');
-      s.cards.forEach(function (el) { el.style.transform = 'none'; });
-
-      var y = window.scrollY || window.pageYOffset || 0;
-      s.tops = s.panels.map(function (el) { return el.getBoundingClientRect().top + y; });
-      s.heights = s.panels.map(function (el) { return el.offsetHeight; });
-
-      s.seq.classList.remove('is-measuring');
-    }
-
-    var queued = false;
-
-    function paint() {
-      queued = false;
-      var y = window.scrollY || window.pageYOffset || 0;
-
-      seqs.forEach(function (s) {
-        var panels = s.panels;
-
-        // How far the following panel has covered each one, 0 to 1.
-        var covered = panels.map(function (el, i) {
-          if (i === panels.length - 1) return 0;   // nothing covers the last panel
-          var h = s.heights[i];
-          if (!h) return 0;
-          var p = (y - s.tops[i]) / h;
-          return p < 0 ? 0 : (p > 1 ? 1 : p);
-        });
-
-        s.cards.forEach(function (el, i) {
-          var entered = i === 0 ? 1 : covered[i - 1];  // how far this panel has arrived
-          var leaving = covered[i];                    // how far it is being covered
-
-          var scale = (0.8 + 0.2 * entered) - 0.2 * leaving;
-          var rotate = 5 * (1 - entered) - 5 * leaving;
-
-          el.style.transform =
-            'scale(' + scale.toFixed(4) + ') rotate(' + rotate.toFixed(3) + 'deg)';
-
-          /* Cards cross-fade. Nothing behind them is opaque any more, so
-             without this the outgoing card would sit visible behind the
-             incoming one instead of giving way to it. */
-          if (el !== panels[i]) {
-            el.style.opacity = (entered * (1 - leaving)).toFixed(3);
-          }
-        });
-      });
-    }
-
-    function schedule() {
-      if (!queued) { queued = true; window.requestAnimationFrame(paint); }
-    }
-
-    function remeasure() {
-      seqs.forEach(measure);
-      paint();
-    }
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', remeasure);
-    // Images settling can shift the layout, so measure again once loaded
-    window.addEventListener('load', remeasure);
-    remeasure();
-  }
-
   /* Cursor spotlight.
      Writes the pointer position, relative to each card's own box, onto that
      card as --gx/--gy. Per-card rather than one global viewport coordinate,
@@ -497,7 +405,6 @@
     wireButtons();      // before anything measures layout
     wireMobileNav();
     wireCarousels();
-    wireScrollSequences();
     wireSpotlight();
     wireLightbox();   // after wireCarousels, so cloned tiles are already present
   }
