@@ -386,18 +386,14 @@ p:last-child { margin-bottom: 0; }
    the flow rather than where sticky has painted them. */
 .scroll-seq.is-measuring .scroll-seq__panel { position: static !important; }
 
-/* Stacked variant. The panels are transparent and carry no background of
-   their own, so the page's grey is a single unbroken surface that never
-   moves — only the white cards scale, rotate and cross-fade over it. */
-.scroll-seq--stack .scroll-seq__panel {
-  position: sticky;
-  top: 0;
-  background: none;
-  padding-block: clamp(2rem, 5vw, 3.25rem);
-  transform: none !important;   /* the card moves, not the screen */
+/* Cards that roll as they pass through the viewport.
+   Nothing around them is sticky or full-height, so the page and its grey
+   background behave exactly as they did before — only the card moves. */
+.panel[data-roll] {
+  transform-origin: center center;
 }
 
-.scroll-seq--stack .panel { transform-origin: center center; }
+.is-rolling .panel[data-roll] { will-change: transform; }
 
 .scroll-seq--stack .wrap { max-width: 1060px; }
 .scroll-seq--stack .panel { width: 100%; }
