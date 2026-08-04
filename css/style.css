@@ -786,18 +786,20 @@ p:last-child { margin-bottom: 0; }
 .uc__row {
   --gx: -999px;
   --gy: -999px;
-  --glow-size: 340px;
+  --glow-size: 900px;              /* wide enough to reach a big card's edges */
   --glow-tint: 230 58 23;          /* accent */
-  --glow-wash: .10;
-  --glow-edge: .85;
+  --glow-wash: .20;                /* tint across the surface */
+  --glow-edge: 1;                  /* brightness of the lit border */
+  --glow-halo: .5;                 /* soft bloom outside the card */
+  --glow-ring: 2px;
   position: relative;
   background-image: radial-gradient(
     var(--glow-size) var(--glow-size) at var(--gx) var(--gy),
-    rgb(var(--glow-tint) / var(--glow-wash)), transparent 70%);
+    rgb(var(--glow-tint) / var(--glow-wash)), transparent 65%);
   background-repeat: no-repeat;
 }
 
-/* The lit edge: a ring drawn by masking out the middle of a gradient */
+/* The lit edge: a ring drawn by masking the middle out of a gradient */
 .panel::before,
 .stat::before,
 .trust::before,
@@ -806,10 +808,10 @@ p:last-child { margin-bottom: 0; }
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: var(--glow-ring);
   background: radial-gradient(
-    calc(var(--glow-size) * .8) calc(var(--glow-size) * .8) at var(--gx) var(--gy),
-    rgb(var(--glow-tint) / var(--glow-edge)), transparent 70%);
+    var(--glow-size) var(--glow-size) at var(--gx) var(--gy),
+    rgb(var(--glow-tint) / var(--glow-edge)), transparent 60%);
   -webkit-mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
   mask: linear-gradient(#000, #000) content-box, linear-gradient(#000, #000);
   -webkit-mask-composite: xor;
@@ -817,20 +819,40 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
 }
 
-/* Navy reads better than accent on the pale stat cards */
-.stat { --glow-tint: 11 45 114; --glow-wash: .09; }
+/* Bloom spilling out past the edge. Sits behind the card's own background,
+   so it only shows in the few pixels outside the box. */
+.panel::after,
+.stat::after,
+.trust::after,
+.uc__row::after {
+  content: "";
+  position: absolute;
+  inset: -10px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(
+    var(--glow-size) var(--glow-size) at var(--gx) var(--gy),
+    rgb(var(--glow-tint) / var(--glow-halo)), transparent 55%);
+  filter: blur(12px);
+  pointer-events: none;
+}
+
+/* Navy reads better than accent on the pale stat tiles */
+.stat { --glow-tint: 11 45 114; --glow-wash: .16; }
 
 /* Yellow is the only tint with enough contrast on the dark panel */
 .trust {
   --glow-tint: 252 217 0;
-  --glow-wash: .07;
-  --glow-edge: .55;
+  --glow-wash: .12;
+  --glow-edge: .8;
+  --glow-halo: .35;
 }
 
 /* The About page has no card, so light the illustration's lane instead */
 .uc__row {
-  --glow-wash: .07;
+  --glow-wash: .14;
   --glow-edge: 0;
+  --glow-halo: 0;
   border-radius: var(--r-md);
 }
 
