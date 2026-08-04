@@ -354,6 +354,109 @@
     }, { passive: true });
   }
 
+  /* Lightbox for the carousel photos.
+     The marquee clones its items, so clicks are handled by delegation and the
+     clicked tile is matched back to the canonical list by its image path —
+     that way a clone opens the right photo and the counter still reads 8. */
+  function wireLightbox() {
+    var items = Array.prototype.slice.call(
+      document.querySelectorAll('.carousel__item[data-full]:not([aria-hidden="true"])'));
+    if (!items.length) return;
+
+    var box = document.createElement('div');
+    box.className = 'lightbox';
+    box.setAttribute('role', 'dialog');
+    box.setAttribute('aria-modal', 'true');
+    box.setAttribute('aria-label', 'Photo viewer');
+    box.setAttribute('data-open', 'false');
+    box.innerHTML =
+      '<button class="lightbox__btn lightbox__btn--close" type="button" aria-label="Close">' +
+        '<svg viewBox="0 0 24 24" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>' +
+      '</button>' +
+      '<button class="lightbox__btn lightbox__btn--prev" type="button" aria-label="Previous photo">' +
+        '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m15 18-6-6 6-6"/></svg>' +
+      '</button>' +
+      '<button class="lightbox__btn lightbox__btn--next" type="button" aria-label="Next photo">' +
+        '<svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>' +
+      '</button>' +
+      '<figure class="lightbox__figure">' +
+        '<img class="lightbox__img" alt="">' +
+        '<figcaption class="lightbox__caption"></figcaption>' +
+      '</figure>';
+    document.body.appendChild(box);
+
+    var img = box.querySelector('.lightbox__img');
+    var cap = box.querySelector('.lightbox__caption');
+    var btnClose = box.querySelector('.lightbox__btn--close');
+    var btnPrev = box.querySelector('.lightbox__btn--prev');
+    var btnNext = box.querySelector('.lightbox__btn--next');
+
+    var current = 0;
+    var opener = null;
+
+    function show(i) {
+      current = (i + items.length) % items.length;      // wrap at both ends
+      var tile = items[current];
+      var thumb = tile.querySelector('img');
+      var label = tile.querySelector('.carousel__label');
+
+      img.src = tile.getAttribute('data-full') || (thumb ? thumb.src : '');
+      img.alt = thumb ? thumb.alt : '';
+      cap.innerHTML = (label ? label.textContent : '') +
+        '<span class="lightbox__count">' + (current + 1) + ' of ' + items.length + '</span>';
+    }
+
+    function open(i, from) {
+      opener = from || null;
+      show(i);
+      box.setAttribute('data-open', 'true');
+      document.documentElement.classList.add('has-lightbox');
+      btnClose.focus();
+    }
+
+    function close() {
+      box.setAttribute('data-open', 'false');
+      document.documentElement.classList.remove('has-lightbox');
+      if (opener) { opener.focus(); opener = null; }
+    }
+
+    // Delegated so cloned tiles work too
+    document.addEventListener('click', function (e) {
+      var tile = e.target.closest ? e.target.closest('.carousel__item[data-full]') : null;
+      if (!tile) return;
+      var path = tile.getAttribute('data-full');
+      var i = 0;
+      for (var n = 0; n < items.length; n++) {
+        if (items[n].getAttribute('data-full') === path) { i = n; break; }
+      }
+      open(i, tile);
+    });
+
+    btnClose.addEventListener('click', close);
+    btnPrev.addEventListener('click', function () { show(current - 1); });
+    btnNext.addEventListener('click', function () { show(current + 1); });
+
+    // Clicking the backdrop closes; clicking the photo itself does not
+    box.addEventListener('click', function (e) {
+      if (e.target === box) close();
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (box.getAttribute('data-open') !== 'true') return;
+      if (e.key === 'Escape') { close(); }
+      else if (e.key === 'ArrowLeft') { show(current - 1); }
+      else if (e.key === 'ArrowRight') { show(current + 1); }
+      else if (e.key === 'Tab') {
+        // keep focus inside the dialog while it is open
+        var focusable = [btnClose, btnPrev, btnNext];
+        var at = focusable.indexOf(document.activeElement);
+        e.preventDefault();
+        var step = e.shiftKey ? -1 : 1;
+        focusable[(at + step + focusable.length) % focusable.length].focus();
+      }
+    });
+  }
+
   function init() {
     var headerSlot = document.getElementById('site-header');
     var footerSlot = document.getElementById('site-footer');
@@ -365,6 +468,7 @@
     wireCarousels();
     wireScrollSequences();
     wireSpotlight();
+    wireLightbox();   // after wireCarousels, so cloned tiles are already present
   }
 
   if (document.readyState === 'loading') {
