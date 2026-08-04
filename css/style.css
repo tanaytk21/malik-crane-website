@@ -181,6 +181,14 @@ p:last-child { margin-bottom: 0; }
 
 .btn--square { border-radius: var(--r-sm); }
 
+/* Marks a button that leaves the site */
+.btn__external {
+  width: 15px;
+  height: 15px;
+  margin-left: .45rem;
+  vertical-align: -2px;
+}
+
 .btn-row {
   display: flex;
   flex-wrap: wrap;
