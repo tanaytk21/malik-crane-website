@@ -327,7 +327,7 @@
      one per frame. */
   function wireSpotlight() {
     var cards = document.querySelectorAll(
-      '.panel, .stat, .trust, .uc__row, .carousel__item, .panel__media figure');
+      '.panel, .stat, .trust, .uc__row, .panel__media figure');
     if (!cards.length) return;
 
     // Pointer-driven, so skip devices that only report coarse input

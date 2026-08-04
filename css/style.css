@@ -784,7 +784,6 @@ p:last-child { margin-bottom: 0; }
 .stat,
 .trust,
 .uc__row,
-.carousel__item,
 .panel__media figure {
   --gx: -999px;
   --gy: -999px;
@@ -806,7 +805,6 @@ p:last-child { margin-bottom: 0; }
 .stat::before,
 .trust::before,
 .uc__row::before,
-.carousel__item::before,
 .panel__media figure::before {
   content: "";
   position: absolute;
@@ -830,7 +828,6 @@ p:last-child { margin-bottom: 0; }
 .stat::after,
 .trust::after,
 .uc__row::after,
-.carousel__item::after,
 .panel__media figure::after {
   content: "";
   position: absolute;
@@ -863,8 +860,9 @@ p:last-child { margin-bottom: 0; }
   border-radius: var(--r-md);
 }
 
-/* Photographs: a lit edge reads well, a wash over the image does not */
-.carousel__item,
+/* Photographs: a lit edge reads well, a wash over the image does not.
+   The home carousel is deliberately left out — it is already in motion, and
+   a glow travelling across moving thumbnails was too busy. */
 .panel__media figure {
   --glow-size: 520px;
   --glow-wash: 0;
