@@ -35,9 +35,9 @@
     mapsUrl: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(MAP_QUERY),
     // Keyless Google Maps embed. loading="lazy" keeps it off the critical path.
     mapEmbed: 'https://www.google.com/maps?q=' + encodeURIComponent(MAP_QUERY) + '&z=17&output=embed',
-    // TODO: replace with the real profile URLs when you have them
-    facebook: '#',
-    linkedin: '#'
+    facebook: 'https://www.facebook.com/malikcraneservices/',
+    // Company root rather than the /about/ tab, so the icon lands on the page itself
+    linkedin: 'https://www.linkedin.com/company/malik-crane-services-private-limited/'
   };
 
   /* Inline icons — the Wix originals were watermarked stock files. */
@@ -112,8 +112,10 @@
             '<div>' +
               '<h2 class="footer__heading">Follow Us</h2>' +
               '<div class="socials">' +
-                '<a href="' + COMPANY.facebook + '" aria-label="Facebook">' + ICON.facebook + '</a>' +
-                '<a href="' + COMPANY.linkedin + '" aria-label="LinkedIn">' + ICON.linkedin + '</a>' +
+                '<a href="' + COMPANY.facebook + '" target="_blank" rel="noopener"' +
+                  ' aria-label="Malik Crane Services on Facebook">' + ICON.facebook + '</a>' +
+                '<a href="' + COMPANY.linkedin + '" target="_blank" rel="noopener"' +
+                  ' aria-label="Malik Crane Services on LinkedIn">' + ICON.linkedin + '</a>' +
               '</div>' +
             '</div>' +
 
