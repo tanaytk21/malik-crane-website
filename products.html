@@ -30,91 +30,99 @@
 
     <h1 class="visually-hidden">Our Products</h1>
 
-    <div class="wrap products">
+    <!-- Each slot is a plain, transparent stretch of scroll. The card inside
+         it is what sticks and flips; the page and its grey never move. -->
+    <div class="scroll-seq scroll-seq--cards" data-scroll-seq>
 
       <!-- ============================================================
            Crawler cranes
            ============================================================ -->
-      <section class="panel" id="crawler-cranes" data-roll>
-        <h2 class="panel__title">Crawler Cranes</h2>
-        <hr class="panel__rule">
-        <p class="panel__lede">
-          Our fleet covers both hydraulic operated crawler cranes and heavy duty
-          mechanical crawler cranes for multi-purpose project needs.
-        </p>
+      <div class="scroll-seq__panel" id="crawler-cranes">
+        <section class="panel" data-seq-card>
+          <h2 class="panel__title">Crawler Cranes</h2>
+          <hr class="panel__rule">
+          <p class="panel__lede">
+            Our fleet covers both hydraulic operated crawler cranes and heavy duty
+            mechanical crawler cranes for multi-purpose project needs.
+          </p>
 
-        <div class="panel__media panel__media--3">
-          <figure>
-            <img src="images/fleet-terex-crawler-crane.jpg"
-                 alt="Terex lattice boom crawler crane in Malik Crane Services livery on a coastal site"
-                 width="560" height="560" loading="lazy">
-          </figure>
-          <figure>
-            <img src="images/fleet-crawler-linkbelt.jpg"
-                 alt="Link-Belt LS-518 crawler crane handling wind turbine components in an open field"
-                 width="560" height="560" loading="lazy">
-          </figure>
-          <figure>
-            <img src="images/fleet-crawler-tata.jpg"
-                 alt="TATA 955 ALC crawler crane, 75 tonne safe working load, in Malik Crane Services livery"
-                 width="560" height="560" loading="lazy">
-          </figure>
-        </div>
-      </section>
+          <div class="panel__media panel__media--3">
+            <figure>
+              <img src="images/fleet-terex-crawler-crane.jpg"
+                   alt="Terex lattice boom crawler crane in Malik Crane Services livery on a coastal site"
+                   width="560" height="560" loading="lazy">
+            </figure>
+            <figure>
+              <img src="images/fleet-crawler-linkbelt.jpg"
+                   alt="Link-Belt LS-518 crawler crane handling wind turbine components in an open field"
+                   width="560" height="560" loading="lazy">
+            </figure>
+            <figure>
+              <img src="images/fleet-crawler-tata.jpg"
+                   alt="TATA 955 ALC crawler crane, 75 tonne safe working load, in Malik Crane Services livery"
+                   width="560" height="560" loading="lazy">
+            </figure>
+          </div>
+        </section>
+      </div>
 
       <!-- ============================================================
            Truck cranes
            ============================================================ -->
-      <section class="panel" id="truck-cranes" data-roll>
-        <h2 class="panel__title">Hydraulic Telescopic Boom Truck Cranes</h2>
-        <hr class="panel__rule">
-        <p class="panel__lede">
-          High-mobility telescopic boom solution designed for quick setup and
-          versatile lifting capacities across various urban job sites.
-        </p>
+      <div class="scroll-seq__panel" id="truck-cranes">
+        <section class="panel" data-seq-card>
+          <h2 class="panel__title">Hydraulic Telescopic Boom Truck Cranes</h2>
+          <hr class="panel__rule">
+          <p class="panel__lede">
+            High-mobility telescopic boom solution designed for quick setup and
+            versatile lifting capacities across various urban job sites.
+          </p>
 
-        <div class="panel__media panel__media--2">
-          <figure>
-            <img src="images/fleet-truck-crane-yard.jpg"
-                 alt="Grove hydraulic telescopic boom truck crane parked at a yard"
-                 width="560" height="560" loading="lazy">
-          </figure>
-          <figure>
-            <img src="images/fleet-truck-crane-site.jpg"
-                 alt="Grove truck crane with boom extended, lifting a red steel gantry at a construction site"
-                 width="560" height="560" loading="lazy">
-          </figure>
-        </div>
-      </section>
+          <div class="panel__media panel__media--2">
+            <figure>
+              <img src="images/fleet-truck-crane-yard.jpg"
+                   alt="Grove hydraulic telescopic boom truck crane parked at a yard"
+                   width="560" height="560" loading="lazy">
+            </figure>
+            <figure>
+              <img src="images/fleet-truck-crane-site.jpg"
+                   alt="Grove truck crane with boom extended, lifting a red steel gantry at a construction site"
+                   width="560" height="560" loading="lazy">
+            </figure>
+          </div>
+        </section>
+      </div>
 
       <!-- ============================================================
            Boom lifts
            ============================================================ -->
-      <section class="panel" id="boom-lifts" data-roll>
-        <h2 class="panel__title">Boom Lifts</h2>
-        <hr class="panel__rule">
-        <p class="panel__lede">
-          Also called manlifts or aerial work platforms, these provide safe and
-          efficient height access for maintenance and construction tasks.
-        </p>
+      <div class="scroll-seq__panel" id="boom-lifts">
+        <section class="panel" data-seq-card>
+          <h2 class="panel__title">Boom Lifts</h2>
+          <hr class="panel__rule">
+          <p class="panel__lede">
+            Also called manlifts or aerial work platforms, these provide safe and
+            efficient height access for maintenance and construction tasks.
+          </p>
 
-        <div class="panel__media panel__media--2">
-          <figure>
-            <img src="images/fleet-boom-lift-extended.jpg"
-                 alt="JLG 120HX boom lift with the boom extended and work platform raised"
-                 width="560" height="560" loading="lazy">
-          </figure>
-          <figure>
-            <img src="images/fleet-boom-lift-stowed.jpg"
-                 alt="JLG 120HX four-wheel-drive boom lift in Malik Crane Services livery, boom stowed"
-                 width="560" height="560" loading="lazy">
-          </figure>
-        </div>
+          <div class="panel__media panel__media--2">
+            <figure>
+              <img src="images/fleet-boom-lift-extended.jpg"
+                   alt="JLG 120HX boom lift with the boom extended and work platform raised"
+                   width="560" height="560" loading="lazy">
+            </figure>
+            <figure>
+              <img src="images/fleet-boom-lift-stowed.jpg"
+                   alt="JLG 120HX four-wheel-drive boom lift in Malik Crane Services livery, boom stowed"
+                   width="560" height="560" loading="lazy">
+            </figure>
+          </div>
 
-        <div class="panel__cta">
-          <a class="btn btn--solid" href="portfolio.html">View Full Catalogue</a>
-        </div>
-      </section>
+          <div class="panel__cta">
+            <a class="btn btn--solid" href="portfolio.html">View Full Catalogue</a>
+          </div>
+        </section>
+      </div>
 
     </div>
 

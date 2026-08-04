@@ -386,14 +386,33 @@ p:last-child { margin-bottom: 0; }
    the flow rather than where sticky has painted them. */
 .scroll-seq.is-measuring .scroll-seq__panel { position: static !important; }
 
-/* Cards that roll as they pass through the viewport.
-   Nothing around them is sticky or full-height, so the page and its grey
-   background behave exactly as they did before — only the card moves. */
-.panel[data-roll] {
+/* Card-stack variant.
+   The slot is an ordinary transparent stretch of page that only supplies
+   scroll distance — it is not sticky and has no background, so the grey
+   behind it never moves. The card inside is what sticks and flips, and the
+   next card arrives at full size on top, hiding the one it replaces. */
+.scroll-seq--cards .scroll-seq__panel {
+  position: relative;
+  display: block;
+  min-height: 100vh;
+  background: none;
+  padding-block: 0;
+  padding-inline: var(--gutter);
+}
+
+.scroll-seq--cards .panel {
+  position: sticky;
+  top: calc(var(--header-h) + 1.25rem);
+  max-width: 980px;
+  margin-inline: auto;
   transform-origin: center center;
 }
 
-.is-rolling .panel[data-roll] { will-change: transform; }
+/* Not enough height for a card to travel — fall back to a plain list */
+@media (max-height: 620px) {
+  .scroll-seq--cards .scroll-seq__panel { min-height: 0; padding-block: 1rem; }
+  .scroll-seq--cards .panel { position: static; }
+}
 
 .scroll-seq--stack .wrap { max-width: 1060px; }
 .scroll-seq--stack .panel { width: 100%; }

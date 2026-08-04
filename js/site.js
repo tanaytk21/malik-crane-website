@@ -319,51 +319,6 @@
     remeasure();
   }
 
-  /* Cards that roll as they travel through the viewport.
-     Each card's tilt and scale come from how far its centre sits from the
-     centre of the screen: level and full size when centred, tipped and
-     slightly smaller above and below. Only the card is touched — the page
-     around it, background included, is left completely alone. */
-  function wireCardRolls() {
-    var cards = document.querySelectorAll('[data-roll]');
-    if (!cards.length) return;
-
-    var TILT = 5;    // degrees at full offset
-    var SHRINK = 0.12; // how much smaller at full offset
-    var REACH = 0.62;  // fraction of a screen over which it levels out
-
-    document.documentElement.classList.add('is-rolling');
-
-    var queued = false;
-
-    function paint() {
-      queued = false;
-      var vh = window.innerHeight;
-      var mid = vh / 2;
-
-      cards.forEach(function (el) {
-        var box = el.getBoundingClientRect();
-        var offset = (box.top + box.height / 2 - mid) / (vh * REACH);
-        if (offset > 1) offset = 1;
-        if (offset < -1) offset = -1;
-
-        var away = offset < 0 ? -offset : offset;
-        el.style.transform =
-          'scale(' + (1 - SHRINK * away).toFixed(4) + ') ' +
-          'rotate(' + (TILT * offset).toFixed(3) + 'deg)';
-      });
-    }
-
-    function schedule() {
-      if (!queued) { queued = true; window.requestAnimationFrame(paint); }
-    }
-
-    window.addEventListener('scroll', schedule, { passive: true });
-    window.addEventListener('resize', schedule);
-    window.addEventListener('load', schedule);
-    paint();
-  }
-
   function init() {
     var headerSlot = document.getElementById('site-header');
     var footerSlot = document.getElementById('site-footer');
@@ -374,7 +329,6 @@
     wireMobileNav();
     wireCarousels();
     wireScrollSequences();
-    wireCardRolls();
   }
 
   if (document.readyState === 'loading') {
