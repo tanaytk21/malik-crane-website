@@ -783,7 +783,9 @@ p:last-child { margin-bottom: 0; }
 .panel,
 .stat,
 .trust,
-.uc__row {
+.uc__row,
+.carousel__item,
+.panel__media figure {
   --gx: -999px;
   --gy: -999px;
   --glow-size: 900px;              /* wide enough to reach a big card's edges */
@@ -803,12 +805,15 @@ p:last-child { margin-bottom: 0; }
 .panel::before,
 .stat::before,
 .trust::before,
-.uc__row::before {
+.uc__row::before,
+.carousel__item::before,
+.panel__media figure::before {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: var(--glow-ring);
+  z-index: 2;
   background: radial-gradient(
     var(--glow-size) var(--glow-size) at var(--gx) var(--gy),
     rgb(var(--glow-tint) / var(--glow-edge)), transparent 60%);
@@ -824,7 +829,9 @@ p:last-child { margin-bottom: 0; }
 .panel::after,
 .stat::after,
 .trust::after,
-.uc__row::after {
+.uc__row::after,
+.carousel__item::after,
+.panel__media figure::after {
   content: "";
   position: absolute;
   inset: -10px;
@@ -854,6 +861,16 @@ p:last-child { margin-bottom: 0; }
   --glow-edge: 0;
   --glow-halo: 0;
   border-radius: var(--r-md);
+}
+
+/* Photographs: a lit edge reads well, a wash over the image does not */
+.carousel__item,
+.panel__media figure {
+  --glow-size: 520px;
+  --glow-wash: 0;
+  --glow-halo: .45;
+  --glow-ring: 2px;
+  border-radius: 4px;
 }
 
 /* --------------------------------------------------------------------------

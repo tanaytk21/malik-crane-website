@@ -326,7 +326,8 @@
      Only cards currently on screen are touched, and updates are collapsed to
      one per frame. */
   function wireSpotlight() {
-    var cards = document.querySelectorAll('.panel, .stat, .trust, .uc__row');
+    var cards = document.querySelectorAll(
+      '.panel, .stat, .trust, .uc__row, .carousel__item, .panel__media figure');
     if (!cards.length) return;
 
     // Pointer-driven, so skip devices that only report coarse input
