@@ -676,6 +676,9 @@ p:last-child { margin-bottom: 0; }
   text-align: center;
 }
 
+/* Buttons under the 404 message */
+.uc__actions { justify-content: center; }
+
 /* Side-by-side once there's room, matching the mockup */
 @media (min-width: 760px) {
   .uc__row {
