@@ -378,25 +378,26 @@ p:last-child { margin-bottom: 0; }
   border-radius: var(--r-md);
 }
 
-/* Only promote to its own layer while the effect is actually wired up */
-.scroll-seq.is-live .scroll-seq__panel { will-change: transform; }
+/* Only promote what actually moves, and only once the effect is wired up */
+.scroll-seq.is-live:not(.scroll-seq--stack) .scroll-seq__panel { will-change: transform; }
+.scroll-seq.is-live .panel[data-seq-card] { will-change: transform; }
 
 /* Held for a single synchronous read so the panels report their position in
    the flow rather than where sticky has painted them. */
 .scroll-seq.is-measuring .scroll-seq__panel { position: static !important; }
 
-/* Stacked variant: every panel sticks, so each card slides up over the last.
-   The dark container shows through around a panel while it is scaled below
-   full size — the same framing the reference effect gets from its black
-   backdrop, and it stops the previous card peeking out at the edges. */
-.scroll-seq--stack { background: var(--ink); }
-
+/* Stacked variant: every panel sticks, so each screen slides up over the
+   last. The grey backdrop stays put — only the card inside is transformed —
+   and because the backdrop is opaque it hides the card beneath completely. */
 .scroll-seq--stack .scroll-seq__panel {
   position: sticky;
   top: 0;
   background: var(--card);
   padding-block: clamp(2rem, 5vw, 3.25rem);
+  transform: none !important;   /* the card moves, not the screen */
 }
+
+.scroll-seq--stack .panel { transform-origin: center center; }
 
 .scroll-seq--stack .wrap { max-width: 1060px; }
 .scroll-seq--stack .panel { width: 100%; }

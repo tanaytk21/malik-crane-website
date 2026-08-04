@@ -240,7 +240,13 @@
       }
       if (panels.length < 2) return;
       seq.classList.add('is-live');
-      seqs.push({ seq: seq, panels: panels, tops: [], heights: [] });
+      /* Geometry is read from the panel, but the transform is applied to the
+         card inside it when one is marked — so the full-height background
+         stays put and only the card moves. */
+      var cards = panels.map(function (el) {
+        return el.querySelector('[data-seq-card]') || el;
+      });
+      seqs.push({ seq: seq, panels: panels, cards: cards, tops: [], heights: [] });
     });
     if (!seqs.length) return;
 
@@ -250,7 +256,7 @@
        flow geometry is cached. Re-measured only on resize. */
     function measure(s) {
       s.seq.classList.add('is-measuring');
-      s.panels.forEach(function (el) { el.style.transform = 'none'; });
+      s.cards.forEach(function (el) { el.style.transform = 'none'; });
 
       var y = window.scrollY || window.pageYOffset || 0;
       s.tops = s.panels.map(function (el) { return el.getBoundingClientRect().top + y; });
@@ -277,7 +283,7 @@
           return p < 0 ? 0 : (p > 1 ? 1 : p);
         });
 
-        panels.forEach(function (el, i) {
+        s.cards.forEach(function (el, i) {
           var entered = i === 0 ? 1 : covered[i - 1];  // how far this panel has arrived
           var leaving = covered[i];                    // how far it is being covered
 
@@ -286,11 +292,6 @@
 
           el.style.transform =
             'scale(' + scale.toFixed(4) + ') rotate(' + rotate.toFixed(3) + 'deg)';
-
-          /* Fade a panel out as the next one covers it. A scaled-down panel
-             can never fully hide the one beneath, so without this the older
-             card peeks out along the edges. */
-          el.style.opacity = (1 - leaving).toFixed(3);
         });
       });
     }
