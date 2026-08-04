@@ -181,6 +181,86 @@ p:last-child { margin-bottom: 0; }
 
 .btn--square { border-radius: var(--r-sm); }
 
+/* --------------------------------------------------------------------------
+   Button hover: a dot grows to fill the button, the label slides out and a
+   copy slides in behind an arrow. Structure is built by js/site.js, so a
+   button still looks and works correctly if that never runs.
+   -------------------------------------------------------------------------- */
+.btn--fx {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+
+.btn__label,
+.btn__hover {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .45rem;
+  position: relative;
+  z-index: 2;
+  transition: transform .3s ease, opacity .3s ease;
+}
+
+.btn__label { transform: translateX(2px); }
+
+.btn__hover {
+  position: absolute;
+  inset: 0;
+  transform: translateX(2.75rem);
+  opacity: 0;
+}
+
+.btn--fx:hover .btn__label,
+.btn--fx:focus-visible .btn__label {
+  transform: translateX(2.75rem);
+  opacity: 0;
+}
+
+.btn--fx:hover .btn__hover,
+.btn--fx:focus-visible .btn__hover {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.btn__arrow { width: 17px; height: 17px; flex: 0 0 auto; }
+
+/* The growing dot. It rests inside the button's left padding rather than at
+   20% across, which on these wider buttons would sit on top of the label. */
+.btn__dot {
+  position: absolute;
+  left: .95rem;
+  top: calc(50% - 4px);
+  width: 8px;
+  height: 8px;
+  z-index: 1;
+  border-radius: var(--pill);
+  transition: all .3s ease;
+  pointer-events: none;
+}
+
+.btn--fx:hover .btn__dot,
+.btn--fx:focus-visible .btn__dot {
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform: scale(1.8);       /* overshoot so the corners fill completely */
+}
+
+/* Filled buttons are already accent, so the dot arrives in ink */
+.btn--solid .btn__dot { background: var(--ink); }
+.btn--solid.btn--fx:hover { background: var(--accent); border-color: var(--accent); }
+
+/* Outlined buttons fill with accent, and their label turns white as it does */
+.btn--outline .btn__dot { background: var(--accent); }
+.btn--outline.btn--fx:hover,
+.btn--outline.btn--fx:focus-visible { background: transparent; }
+.btn--outline.btn--fx:hover .btn__hover,
+.btn--outline.btn--fx:focus-visible .btn__hover { color: var(--white); }
+
 /* Marks a button that leaves the site */
 .btn__external {
   width: 15px;

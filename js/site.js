@@ -459,6 +459,34 @@
     });
   }
 
+  /* Hover treatment for the call-to-action buttons.
+     A dot grows to fill the button while the label slides out and a second
+     label slides in behind an arrow. The original content is kept as the
+     visible label; the incoming copy is aria-hidden so nothing is announced
+     twice. */
+  function wireButtons() {
+    var ARROW =
+      '<svg class="btn__arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor"' +
+      ' stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+
+    document.querySelectorAll('.btn').forEach(function (btn) {
+      if (btn.querySelector('.btn__label')) return;      // already wired
+
+      // Ignore any screen-reader-only note when building the incoming copy
+      var note = btn.querySelector('.visually-hidden');
+      var label = btn.textContent;
+      if (note) label = label.replace(note.textContent, '');
+      label = label.replace(/\s+/g, ' ').trim();
+
+      btn.innerHTML =
+        '<span class="btn__label">' + btn.innerHTML + '</span>' +
+        '<span class="btn__hover" aria-hidden="true">' + label + ARROW + '</span>' +
+        '<span class="btn__dot" aria-hidden="true"></span>';
+      btn.classList.add('btn--fx');
+    });
+  }
+
   function init() {
     var headerSlot = document.getElementById('site-header');
     var footerSlot = document.getElementById('site-footer');
@@ -466,6 +494,7 @@
     if (headerSlot) headerSlot.outerHTML = headerHTML(currentKey());
     if (footerSlot) footerSlot.outerHTML = footerHTML();
 
+    wireButtons();      // before anything measures layout
     wireMobileNav();
     wireCarousels();
     wireScrollSequences();
