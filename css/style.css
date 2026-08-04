@@ -1051,6 +1051,17 @@ p:last-child { margin-bottom: 0; }
   pointer-events: none;
 }
 
+/* Product cards light along the edge only.
+   The bloom is off here, not just turned down: these cards are position:
+   sticky, which makes them a stacking context, and inside one a z-index:-1
+   pseudo-element paints over the card's own background instead of behind it.
+   The bloom therefore washed across the whole card rather than spilling out
+   past its edge. */
+.panel {
+  --glow-wash: 0;
+  --glow-halo: 0;
+}
+
 /* Navy reads better than accent on the pale stat tiles */
 .stat { --glow-tint: 11 45 114; --glow-wash: .16; }
 
@@ -1076,7 +1087,7 @@ p:last-child { margin-bottom: 0; }
 .panel__media figure {
   --glow-size: 520px;
   --glow-wash: 0;
-  --glow-halo: .45;
+  --glow-halo: 0;      /* edge only, to match the card around them */
   --glow-ring: 2px;
   border-radius: 4px;
 }
