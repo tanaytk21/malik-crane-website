@@ -760,7 +760,7 @@ p:last-child { margin-bottom: 0; }
   background: none;
   font: inherit;
   color: inherit;
-  cursor: zoom-in;
+  cursor: pointer;
   text-align: left;
 }
 
