@@ -292,6 +292,13 @@
 
           el.style.transform =
             'scale(' + scale.toFixed(4) + ') rotate(' + rotate.toFixed(3) + 'deg)';
+
+          /* Cards cross-fade. Nothing behind them is opaque any more, so
+             without this the outgoing card would sit visible behind the
+             incoming one instead of giving way to it. */
+          if (el !== panels[i]) {
+            el.style.opacity = (entered * (1 - leaving)).toFixed(3);
+          }
         });
       });
     }
