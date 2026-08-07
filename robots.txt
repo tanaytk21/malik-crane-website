@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+
+# Placeholder pages carry a noindex meta tag rather than being blocked here,
+# so crawlers can still follow the links on them.
+
+Sitemap: https://www.malikcrane.com/sitemap.xml
