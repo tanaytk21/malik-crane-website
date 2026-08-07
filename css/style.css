@@ -869,6 +869,15 @@ p:last-child { margin-bottom: 0; }
   stroke-width: 1.7;
 }
 
+/* Same monogram-plus-wordmark lockup as the header */
+.footer__logo {
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+}
+.footer__logo-mark { height: 38px; width: auto; }
+.footer__logo-word { height: 34px; width: auto; }
+
 .footer__tagline {
   margin: .75rem 0 0;
   font-size: .95rem;

@@ -105,7 +105,11 @@
             '</div>' +
 
             '<div>' +
-              '<img src="images/logo-wordmark.png" alt="Malik Crane Services Pvt. Ltd." width="500" height="99" style="max-width:220px">' +
+              '<div class="footer__logo">' +
+                '<img class="footer__logo-mark" src="images/logo-monogram.png" alt="" width="167" height="137">' +
+                '<img class="footer__logo-word" src="images/logo-wordmark.png"' +
+                  ' alt="Malik Crane Services Pvt. Ltd." width="500" height="99">' +
+              '</div>' +
               '<p class="footer__tagline">' + COMPANY.tagline + '</p>' +
             '</div>' +
 
