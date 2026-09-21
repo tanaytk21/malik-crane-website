@@ -16,12 +16,12 @@
     { label: 'Blog',          href: 'blog.html',      key: 'blog' }
   ];
 
-  var ADDRESS = 'Amar Industrial Estate, Building No 7, CST Road, Kolivery Village, ' +
-                'MMRDA Area, Kalina, Santacruz East, Mumbai, Maharashtra 400098, India';
+  var ADDRESS = 'Unit No. 7, Amar Industrial Estate, 159 CST Road, Kalina, ' +
+                'Santacruz (E), Mumbai - 400 098';
 
   /* Exact coordinates of the office, supplied by the owner. Using lat/lng
-     rather than the address string stops Google guessing — it geocodes the
-     Kalina/MMRDA address to the wrong building. */
+     rather than the address string stops Google guessing — it geocodes this
+     stretch of CST Road to the wrong building. */
   var MAP_QUERY = '19.0718907,72.8663181';
 
   var COMPANY = {
@@ -29,8 +29,8 @@
     tagline: 'Lifting Your Projects Higher',
     address: ADDRESS,
     email: 'contact@malikcrane.com',
-    phone: '+91 7942637031',
-    phoneHref: '+917942637031',
+    phone: '022-67162020',
+    phoneHref: '+912267162020',
     // The button says "Get directions", so route straight into navigation.
     mapsUrl: 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(MAP_QUERY),
     // Keyless Google Maps embed. loading="lazy" keeps it off the critical path.
